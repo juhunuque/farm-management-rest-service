@@ -1,0 +1,25 @@
+version: '3'
+services:
+  db:
+    build: ./database
+    container_name: farm_database
+    volumes:
+      - ./database/volume:/var/lib/mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: farm
+      MYSQL_USER: farmer
+      MYSQL_PASSWORD: farmerComplexPassword
+  app:
+    depends_on:
+      - db
+    build: ./
+    container_name: farm_application
+    restart: always
+    ports:
+      - "8080:8080"
+    links:
+      - db
